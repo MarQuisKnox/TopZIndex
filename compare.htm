@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<title>TopZIndex plugin for jQuery</title>
+
+	<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+	<script type="text/javascript">google.load("jquery", "1.3.2");</script>
+	<script type="text/javascript" src="jquery.maxzindex.min.js"></script>
+	<script type="text/javascript" src="jquery.topzindex.min.js"></script>
+</head>
+<body>
+<h1>Comparison of MaxZIndex to TopZIndex</h1>
+<h2>v 1.2</h2>
+<p>Performance comparison between MaxZindex and TopZIndex. Wait for the times to appear at the bottom.</p>
+<div id="demoBlocks" style="position:relative; background-color:lightyellow;"></div>
+<p id="status"></p>
+	
+<script type="text/javascript">
+	var $container = $("#demoBlocks"),
+		$status = $("#status"),
+		$blocks = [],
+		tl = 50;
+	
+	$.each(["Blue", "Green", "Yellow", "Red"],
+		function (i, v) {
+			($blocks[i] = $('<div style="position:absolute; width:200px; height:200px; top:' + tl + 'px; left:' + tl + 'px; background-color:' + v + '; text-align:right;"></div>')).appendTo($container);
+			tl += 50;
+		}
+	);
+
+	$container.width(tl + 200).height(tl + 200);
+	window.setTimeout(function () {$status.append('MaxZIndex test (read) start...<br />')}, 1);
+	window.setTimeout(readMaxZIndexTest, 100);
+	
+	function readMaxZIndexTest() {
+		var startTime = (new Date()).getTime();
+		
+		for (var x=0; x<4000; x++) {
+			$.maxZIndex();
+		}
+		
+		$status.append('MaxZIndex (read) end: ' + ((new Date()).getTime() - startTime) + "ms<br /><br />");
+		window.setTimeout(function () {$status.append('TopZIndex test (read) start...<br />')}, 1);
+		window.setTimeout(readTopZIndexTest, 100);
+	}
+
+	function readTopZIndexTest() {
+		var startTime = (new Date()).getTime();
+		
+		for (var x=0; x<4000; x++) {
+			$.topZIndex();
+		}
+		
+		$status.append('TopZIndex (read) end: ' + ((new Date()).getTime() - startTime) + "ms<br /><br />");
+		window.setTimeout(function () {$status.append('MaxZIndex test (set) start...<br />')}, 1);
+		window.setTimeout(setMaxZIndexTest, 100);
+	}
+
+	function setMaxZIndexTest() {
+		var startTime = (new Date()).getTime();
+		
+		for (var x=0; x<1000; x++) {
+			for (var y=0; y<4; y++) {
+				$blocks[y].maxZIndex();
+			}
+		}
+		
+		$status.append('MaxZIndex (set) end: ' + ((new Date()).getTime() - startTime) + "ms<br /><br />");
+		window.setTimeout(function () {$status.append('TopZIndex test (set) start...<br />')}, 1);
+		window.setTimeout(setTopZIndexTest, 100);
+	}
+
+	function setTopZIndexTest() {
+		var startTime = (new Date()).getTime();
+		
+		for (var x=0; x<1000; x++) {
+			for (var y=0; y<4; y++) {
+				$blocks[y].topZIndex();
+			}
+		}
+		
+		$status.append('TopZIndex (set) end: ' + ((new Date()).getTime() - startTime) + "ms<br /><br />");
+	}
+</script>
+</body>
+</html>
